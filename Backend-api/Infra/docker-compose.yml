@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  backend:
+    build: ../backend
+    image: auth-backend:1.0.0
+    container_name: auth_backend
+    volumes:
+      - ../backend/users.json:/app/users.json
+    ports:
+      - "3001:3000"
+    networks:
+      - auth-net
+
+  frontend:
+    build: ../frontend
+    image: auth-frontend:1.0.0
+    container_name: auth_frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    networks:
+      - auth-net
+
+networks:
+  auth-net:
+    driver: bridge

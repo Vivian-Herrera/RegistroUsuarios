@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  backend:
+    image: auth-backend:1.0.0
+    volumes:
+      - users_data:/app/users.json
+    deploy:
+      replicas: 2
+    ports:
+      - target: 3000
+        published: 3001
+        protocol: tcp
+    networks:
+      - auth-net
+
+  frontend:
+    image: auth-frontend:1.0.0
+    deploy:
+      replicas: 2
+    ports:
+      - target: 80
+        published: 8080
+        protocol: tcp
+    networks:
+      - auth-net
+
+volumes:
+  users_data:
+
+networks:
+  auth-net:
+    driver: overlay
